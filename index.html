@@ -1671,6 +1671,25 @@ GEOVANA	30	FEMININO"></textarea>
             document.getElementById('loading').style.display = 'none';
         }
 
+        // Função auxiliar para garantir que não haja headers duplicados
+        function normalizeHeaders(headers) {
+            const seen = new Map();
+            return headers.map((header, index) => {
+                let normalizedHeader = String(header || `Coluna${index + 1}`).trim();
+
+                // Se o header já existe, adicionar sufixo numérico
+                if (seen.has(normalizedHeader)) {
+                    const count = seen.get(normalizedHeader);
+                    seen.set(normalizedHeader, count + 1);
+                    normalizedHeader = `${normalizedHeader}_${count + 1}`;
+                } else {
+                    seen.set(normalizedHeader, 0);
+                }
+
+                return normalizedHeader;
+            });
+        }
+
         function processData() {
             const pasteData = document.getElementById('pasteArea').value.trim();
             if (!pasteData) {
@@ -1689,20 +1708,30 @@ GEOVANA	30	FEMININO"></textarea>
                         throw new Error('Dados insuficientes');
                     }
                     
+                    // Validar número de linhas
+                    if (parsedData.length > 100000) {
+                        throw new Error('Muitas linhas. Limite: 100.000 linhas');
+                    }
+
                     const headers = parsedData[0];
                     const rows = parsedData.slice(1);
-                    
+
+                    // Normalizar headers para evitar duplicados
+                    const normalizedHeaders = normalizeHeaders(headers);
+
                     const data = rows.map(row => {
                         const rowObj = {};
-                        headers.forEach((header, index) => {
-                            rowObj[String(header || `Coluna${index + 1}`).trim()] = 
-                                row[index] !== undefined ? String(row[index]).trim() : '';
+                        normalizedHeaders.forEach((headerName, index) => {
+                            const cellValue = row[index] !== undefined && row[index] !== null
+                                ? String(row[index]).trim()
+                                : '';
+                            rowObj[headerName] = cellValue;
                         });
                         return rowObj;
-                    }).filter(row => Object.values(row).some(val => val.trim()));
+                    }).filter(row => Object.values(row).some(val => val && val.length > 0));
 
                     currentData = data;
-                    columnOrder = headers.map(h => String(h || 'Sem Nome').trim());
+                    columnOrder = normalizedHeaders;
 
                     displayTable();
                     hideLoading();
@@ -1716,16 +1745,27 @@ GEOVANA	30	FEMININO"></textarea>
 
         function parseComplexTSV(data) {
             try {
+                // Validação de tamanho máximo (50MB)
+                const maxSize = 50 * 1024 * 1024;
+                if (data.length > maxSize) {
+                    throw new Error('Arquivo muito grande. Limite: 50MB');
+                }
+
                 // Primeiro, tentar com parsing simples
-                const lines = data.split('\n');
+                const lines = data.split('\n').filter(line => line.trim());
+                if (lines.length === 0) {
+                    throw new Error('Nenhum dado encontrado');
+                }
+
                 const firstLineColumns = lines[0].split('\t').length;
-                
-                // Se todas as linhas têm o mesmo número de colunas, usar parsing simples
-                const allLinesValid = lines.slice(0, Math.min(10, lines.length))
+
+                // Verificar mais linhas para garantir consistência (até 100 linhas ou todas)
+                const linesToCheck = Math.min(100, lines.length);
+                const allLinesValid = lines.slice(0, linesToCheck)
                     .every(line => line.split('\t').length === firstLineColumns);
-                
+
                 if (allLinesValid) {
-                    return lines.filter(line => line.trim()).map(line => line.split('\t'));
+                    return lines.map(line => line.split('\t').map(cell => cell.trim()));
                 }
                 
                 // Parsing mais complexo para dados com quebras de linha e aspas
@@ -1821,19 +1861,32 @@ GEOVANA	30	FEMININO"></textarea>
                         return;
                     }
                     
+                    // Validar tamanho
+                    if (jsonData.length > 100000) {
+                        hideLoading();
+                        showError('Arquivo muito grande. Limite: 100.000 linhas');
+                        return;
+                    }
+
                     const headers = jsonData[0];
                     const rows = jsonData.slice(1);
-                    
+
+                    // Normalizar headers para evitar duplicados
+                    const normalizedHeaders = normalizeHeaders(headers);
+
                     const processedData = rows.map(row => {
                         const rowObj = {};
-                        headers.forEach((header, index) => {
-                            rowObj[String(header || `Coluna${index + 1}`)] = row[index] !== undefined ? String(row[index]) : '';
+                        normalizedHeaders.forEach((headerName, index) => {
+                            const cellValue = row[index] !== undefined && row[index] !== null
+                                ? String(row[index]).trim()
+                                : '';
+                            rowObj[headerName] = cellValue;
                         });
                         return rowObj;
-                    }).filter(row => Object.values(row).some(val => val.trim()));
-                    
+                    }).filter(row => Object.values(row).some(val => val && val.length > 0));
+
                     currentData = processedData;
-                    columnOrder = headers.map(h => String(h || 'Sem Nome'));
+                    columnOrder = normalizedHeaders;
 
                     displayTable();
                     hideLoading();
