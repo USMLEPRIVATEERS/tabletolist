@@ -19,6 +19,33 @@
             padding: 20px;
             overflow-x: hidden;
             transition: background 0.5s ease;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+            animation: particleFloat 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-20px) scale(1.1);
+            }
         }
 
         /* Dark Mode */
@@ -27,8 +54,13 @@
         }
 
         body.dark-mode .container {
-            background: #0f3460;
+            background: rgba(15, 52, 96, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             color: #e0e0e0;
+            box-shadow:
+                0 8px 32px 0 rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
         }
 
         body.dark-mode .header {
@@ -36,8 +68,15 @@
         }
 
         body.dark-mode .input-section {
-            background: #16213e;
-            border-color: #1a1a2e;
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.8) 0%, rgba(15, 52, 96, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-color: rgba(79, 172, 254, 0.2);
+        }
+
+        body.dark-mode .input-section:hover {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.9) 0%, rgba(15, 52, 96, 0.9) 100%);
+            border-color: rgba(79, 172, 254, 0.4);
         }
 
         body.dark-mode .paste-area,
@@ -148,11 +187,27 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow:
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                0 0 0 1px rgba(255, 255, 255, 0.18);
             overflow: hidden;
             animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
         }
 
         .header {
@@ -209,17 +264,39 @@
         }
 
         .input-section {
-            background: #f8f9ff;
-            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(248, 249, 255, 0.8) 0%, rgba(240, 248, 255, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
             padding: 25px;
             margin-bottom: 30px;
-            border: 2px dashed #ddd;
-            transition: all 0.3s ease;
+            border: 2px dashed rgba(79, 172, 254, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .input-section:hover {
-            border-color: #4facfe;
-            background: #f0f8ff;
+            border-color: rgba(79, 172, 254, 0.6);
+            background: linear-gradient(135deg, rgba(240, 248, 255, 0.9) 0%, rgba(224, 242, 254, 0.9) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(79, 172, 254, 0.15);
+        }
+
+        .input-section:hover::before {
+            opacity: 1;
         }
 
         .input-tabs {
@@ -424,12 +501,30 @@
         }
 
         .table-container {
-            background: white;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(79, 172, 254, 0.1);
             max-height: 400px;
             overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .table-container:hover {
+            box-shadow:
+                0 12px 32px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(79, 172, 254, 0.2);
+        }
+
+        body.dark-mode .table-container {
+            background: rgba(22, 33, 62, 0.98);
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(79, 172, 254, 0.2);
         }
 
         .data-table {
@@ -439,23 +534,77 @@
         }
 
         .data-table th {
-            background: #4facfe;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
             padding: 15px 10px;
             text-align: left;
             font-weight: 600;
             position: sticky;
             top: 0;
-            cursor: move;
+            cursor: grab;
             user-select: none;
+            transition: all 0.3s ease;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .data-table th::before {
+            content: '⋮⋮';
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 16px;
+            letter-spacing: -2px;
+        }
+
+        .data-table th:hover::before {
+            opacity: 0.5;
         }
 
         .data-table th:hover {
-            background: #3a8bfd;
+            background: linear-gradient(135deg, #3a8bfd 0%, #00d4e6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .data-table th:active {
+            cursor: grabbing;
         }
 
         .data-table th.dragging {
-            opacity: 0.5;
+            opacity: 0.6;
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 8px 24px rgba(79, 172, 254, 0.5);
+            z-index: 1000;
+            cursor: grabbing;
+        }
+
+        .data-table th.drag-over {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            transform: scale(1.05);
+        }
+
+        .data-table th.drag-over::after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ff6b6b;
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
         }
 
         .data-table td {
@@ -618,9 +767,11 @@
         }
 
         .result-container {
-            background: #f8f9fa;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(248, 249, 250, 0.95) 0%, rgba(233, 236, 239, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(79, 172, 254, 0.2);
+            border-radius: 12px;
             padding: 25px;
             max-height: 500px;
             overflow-y: auto;
@@ -628,6 +779,13 @@
             font-size: 14px;
             line-height: 1.6;
             white-space: pre-wrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .result-container:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border-color: rgba(79, 172, 254, 0.3);
         }
 
         .loading {
@@ -873,18 +1031,27 @@
         }
 
         .history-close {
-            background: none;
-            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             font-size: 24px;
             cursor: pointer;
-            padding: 5px;
+            padding: 8px 12px;
             line-height: 1;
-            transition: transform 0.2s;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
         .history-close:hover {
-            transform: scale(1.2);
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .history-close:active {
+            transform: scale(0.95) rotate(90deg);
         }
 
         .history-content {
@@ -1165,12 +1332,22 @@
         }
 
         .stats {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(227, 242, 253, 0.8) 0%, rgba(187, 222, 251, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 18px;
+            border-radius: 12px;
             margin-bottom: 20px;
             font-size: 14px;
             color: #1565c0;
+            border: 1px solid rgba(79, 172, 254, 0.2);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stats:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(79, 172, 254, 0.15);
         }
 
         .error {
@@ -1363,7 +1540,7 @@ GEOVANA	30	FEMININO"></textarea>
             <div id="resultSection" class="result-section">
                 <h2>📋 Resultado da Conversão</h2>
                 <div class="result-controls">
-                    <button class="result-btn" onclick="copyResult()">📋 Copiar Resultado</button>
+                    <button class="result-btn" onclick="copyResult(event)">📋 Copiar Resultado</button>
                     <button class="result-btn" onclick="downloadResult()">💾 Baixar como TXT</button>
                     <button class="result-btn" onclick="openExportModal()">📤 Exportar Avançado</button>
                     <button class="result-btn" onclick="clearAll()">🔄 Reiniciar</button>
@@ -1711,6 +1888,7 @@ GEOVANA	30	FEMININO"></textarea>
                 
                 th.addEventListener('dragstart', handleDragStart);
                 th.addEventListener('dragover', handleDragOver);
+                th.addEventListener('dragleave', handleDragLeave);
                 th.addEventListener('drop', handleDrop);
                 th.addEventListener('dragend', handleDragEnd);
                 
@@ -1758,28 +1936,78 @@ GEOVANA	30	FEMININO"></textarea>
         function handleDragStart(e) {
             draggedColumn = parseInt(e.target.dataset.columnIndex);
             e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+
+            // Criar uma imagem de arraste customizada
+            const dragImage = e.target.cloneNode(true);
+            dragImage.style.opacity = '0.8';
+            dragImage.style.position = 'absolute';
+            dragImage.style.top = '-1000px';
+            document.body.appendChild(dragImage);
+            e.dataTransfer.setDragImage(dragImage, 0, 0);
+            setTimeout(() => document.body.removeChild(dragImage), 0);
         }
 
         function handleDragOver(e) {
             e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const targetTh = e.target.closest('th');
+            if (targetTh && targetTh.dataset.columnIndex) {
+                // Remover classe de todos os headers
+                document.querySelectorAll('.data-table th').forEach(th => {
+                    th.classList.remove('drag-over');
+                });
+
+                // Adicionar classe apenas no target
+                const targetColumn = parseInt(targetTh.dataset.columnIndex);
+                if (targetColumn !== draggedColumn) {
+                    targetTh.classList.add('drag-over');
+                }
+            }
+        }
+
+        function handleDragLeave(e) {
+            const targetTh = e.target.closest('th');
+            if (targetTh) {
+                targetTh.classList.remove('drag-over');
+            }
         }
 
         function handleDrop(e) {
             e.preventDefault();
-            const targetColumn = parseInt(e.target.dataset.columnIndex);
-            
+
+            // Remover todas as classes drag-over
+            document.querySelectorAll('.data-table th').forEach(th => {
+                th.classList.remove('drag-over');
+            });
+
+            const targetTh = e.target.closest('th');
+            if (!targetTh) return;
+
+            const targetColumn = parseInt(targetTh.dataset.columnIndex);
+
             if (draggedColumn !== null && targetColumn !== draggedColumn) {
                 // Reordenar colunas
                 const draggedCol = columnOrder[draggedColumn];
                 columnOrder.splice(draggedColumn, 1);
                 columnOrder.splice(targetColumn, 0, draggedCol);
-                
+
+                // Feedback visual
+                showInfo(`Coluna "${draggedCol}" movida com sucesso!`, 'Reordenado');
+
                 updateTableDisplay();
             }
         }
 
         function handleDragEnd(e) {
             e.target.classList.remove('dragging');
+
+            // Remover todas as classes drag-over
+            document.querySelectorAll('.data-table th').forEach(th => {
+                th.classList.remove('drag-over');
+            });
+
             draggedColumn = null;
         }
 
@@ -1851,18 +2079,24 @@ GEOVANA	30	FEMININO"></textarea>
             }, 100);
         }
 
-        function copyResult() {
+        function copyResult(e) {
             const result = document.getElementById('resultContainer').textContent;
+            if (!result || result.trim() === '') {
+                showError('Não há resultado para copiar!');
+                return;
+            }
+
             navigator.clipboard.writeText(result).then(() => {
-                const btn = event.target;
+                const btn = e ? e.target : event.target;
                 const originalText = btn.textContent;
                 btn.textContent = '✅ Copiado!';
                 showSuccess('O resultado foi copiado para a área de transferência!', 'Copiado!');
                 setTimeout(() => {
                     btn.textContent = originalText;
                 }, 2000);
-            }).catch(() => {
-                showError('Erro ao copiar o resultado. Tente novamente.');
+            }).catch((err) => {
+                console.error('Erro ao copiar:', err);
+                showError('Erro ao copiar. Tente usar Ctrl+C manualmente.');
             });
         }
 
