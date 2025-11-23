@@ -18,6 +18,88 @@
             min-height: 100vh;
             padding: 20px;
             overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body.dark-mode .container {
+            background: #0f3460;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+        }
+
+        body.dark-mode .input-section {
+            background: #16213e;
+            border-color: #1a1a2e;
+        }
+
+        body.dark-mode .paste-area,
+        body.dark-mode .control-group select {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-color: #16213e;
+        }
+
+        body.dark-mode .tab-button {
+            background: #16213e;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .tab-button.active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        body.dark-mode .data-table th {
+            background: #16213e;
+        }
+
+        body.dark-mode .data-table td {
+            border-bottom-color: #1a1a2e;
+        }
+
+        body.dark-mode .data-table tr:hover {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode .result-container {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-color: #16213e;
+        }
+
+        body.dark-mode .stats {
+            background: #16213e;
+            color: #4facfe;
+        }
+
+        body.dark-mode .table-controls {
+            background: #16213e;
+        }
+
+        body.dark-mode .file-upload {
+            background: #16213e;
+            border-color: #1a1a2e;
+        }
+
+        body.dark-mode .toast {
+            background: #16213e;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .toast-title {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .toast-message {
+            color: #b0b0b0;
         }
 
         /* Animações de entrada */
@@ -656,6 +738,432 @@
             animation: slideOutRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: white;
+            border: none;
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            padding: 3px;
+        }
+
+        .dark-mode-toggle::before {
+            content: '☀️';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode .dark-mode-toggle::before {
+            content: '🌙';
+            transform: translateX(30px);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 10000;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 50%, #4facfe 100%);
+            background-size: 200% 100%;
+            animation: progressSlide 2s linear infinite;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes progressSlide {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Search/Filter Box */
+        .table-search {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .table-search:focus {
+            border-color: #4facfe;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        body.dark-mode .table-search {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-color: #16213e;
+        }
+
+        /* History Panel */
+        .history-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 9998;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-panel.open {
+            right: 0;
+        }
+
+        body.dark-mode .history-panel {
+            background: #0f3460;
+        }
+
+        .history-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-header h3 {
+            margin: 0;
+            font-size: 1.3em;
+        }
+
+        .history-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+            transition: transform 0.2s;
+        }
+
+        .history-close:hover {
+            transform: scale(1.2);
+        }
+
+        .history-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .history-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .history-item:hover {
+            transform: translateX(-5px);
+            border-color: #4facfe;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);
+        }
+
+        body.dark-mode .history-item {
+            background: #16213e;
+        }
+
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .history-item-date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        body.dark-mode .history-item-date {
+            color: #999;
+        }
+
+        .history-item-delete {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .history-item-delete:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        .history-item-info {
+            font-size: 13px;
+            color: #333;
+        }
+
+        body.dark-mode .history-item-info {
+            color: #e0e0e0;
+        }
+
+        .history-footer {
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+        }
+
+        body.dark-mode .history-footer {
+            border-top-color: #16213e;
+        }
+
+        .history-toggle {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(79, 172, 254, 0.4);
+            transition: all 0.3s ease;
+            z-index: 9997;
+        }
+
+        .history-toggle:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 6px 25px rgba(79, 172, 254, 0.6);
+        }
+
+        .history-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff6b6b;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Export Modal */
+        .export-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .export-modal.active {
+            display: flex;
+        }
+
+        .export-modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: scaleIn 0.3s ease;
+        }
+
+        body.dark-mode .export-modal-content {
+            background: #0f3460;
+        }
+
+        .export-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .export-modal-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .export-option {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .export-option:hover {
+            border-color: #4facfe;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);
+        }
+
+        .export-option.selected {
+            border-color: #4facfe;
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        body.dark-mode .export-option {
+            border-color: #16213e;
+            background: #16213e;
+        }
+
+        .export-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .export-preview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        body.dark-mode .export-preview {
+            background: #1a1a2e;
+        }
+
+        /* Keyboard shortcuts hint */
+        .shortcuts-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            font-size: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 9996;
+        }
+
+        .shortcuts-hint.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body.dark-mode .shortcuts-hint {
+            background: #16213e;
+            color: #e0e0e0;
+        }
+
+        .shortcuts-hint kbd {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-family: monospace;
+        }
+
+        body.dark-mode .shortcuts-hint kbd {
+            background: #0f3460;
+            border-color: #1a1a2e;
+        }
+
+        /* Sortable column indicator */
+        .data-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .data-table th.sortable::after {
+            content: ' ↕️';
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        .data-table th.sortable.sorted-asc::after {
+            content: ' ↑';
+            opacity: 1;
+        }
+
+        .data-table th.sortable.sorted-desc::after {
+            content: ' ↓';
+            opacity: 1;
+        }
+
         .stats {
             background: #e3f2fd;
             padding: 15px;
@@ -695,8 +1203,76 @@
     </style>
 </head>
 <body>
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()" title="Alternar modo escuro"></button>
+
+    <!-- Progress Bar -->
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
+
+    <!-- History Toggle Button -->
+    <button class="history-toggle" id="historyToggle" onclick="toggleHistoryPanel()" title="Histórico de conversões">
+        📜
+        <span class="history-badge" id="historyBadge" style="display: none;">0</span>
+    </button>
+
+    <!-- History Panel -->
+    <div class="history-panel" id="historyPanel">
+        <div class="history-header">
+            <h3>📜 Histórico</h3>
+            <button class="history-close" onclick="toggleHistoryPanel()">×</button>
+        </div>
+        <div class="history-content" id="historyContent">
+            <p style="text-align: center; opacity: 0.5;">Nenhuma conversão salva ainda</p>
+        </div>
+        <div class="history-footer">
+            <button class="result-btn" onclick="clearHistory()" style="flex: 1;">🗑️ Limpar Tudo</button>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="export-modal" id="exportModal">
+        <div class="export-modal-content">
+            <div class="export-modal-header">
+                <h3>📤 Exportar Dados</h3>
+                <button class="history-close" onclick="closeExportModal()">×</button>
+            </div>
+            <div class="export-options">
+                <div class="export-option" onclick="selectExportFormat('txt')">
+                    <div class="export-icon">📄</div>
+                    <div><strong>TXT</strong></div>
+                    <div style="font-size: 11px;">Texto simples</div>
+                </div>
+                <div class="export-option" onclick="selectExportFormat('csv')">
+                    <div class="export-icon">📊</div>
+                    <div><strong>CSV</strong></div>
+                    <div style="font-size: 11px;">Planilha</div>
+                </div>
+                <div class="export-option" onclick="selectExportFormat('json')">
+                    <div class="export-icon">💾</div>
+                    <div><strong>JSON</strong></div>
+                    <div style="font-size: 11px;">Estruturado</div>
+                </div>
+            </div>
+            <div id="exportPreview" class="export-preview" style="display: none;"></div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="result-btn" onclick="downloadExport()" style="flex: 1;">⬇️ Baixar</button>
+                <button class="result-btn" onclick="copyExport()" style="flex: 1;">📋 Copiar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shortcuts Hint -->
+    <div class="shortcuts-hint" id="shortcutsHint">
+        <strong>Atalhos:</strong><br>
+        <kbd>Ctrl</kbd>+<kbd>V</kbd> Cola dados<br>
+        <kbd>Ctrl</kbd>+<kbd>Enter</kbd> Processar<br>
+        <kbd>Esc</kbd> Limpar
+    </div>
 
     <div class="container">
         <div class="header">
@@ -742,7 +1318,9 @@ GEOVANA	30	FEMININO"></textarea>
             <!-- Seção da Tabela -->
             <div id="tableSection" class="table-section">
                 <div class="stats" id="dataStats"></div>
-                
+
+                <input type="text" class="table-search" id="tableSearch" placeholder="🔍 Buscar na tabela..." onkeyup="filterTable()">
+
                 <div class="table-controls">
                     <div class="control-group">
                         <label for="labelColumn">🏷️ Coluna de Labels:</label>
@@ -787,6 +1365,7 @@ GEOVANA	30	FEMININO"></textarea>
                 <div class="result-controls">
                     <button class="result-btn" onclick="copyResult()">📋 Copiar Resultado</button>
                     <button class="result-btn" onclick="downloadResult()">💾 Baixar como TXT</button>
+                    <button class="result-btn" onclick="openExportModal()">📤 Exportar Avançado</button>
                     <button class="result-btn" onclick="clearAll()">🔄 Reiniciar</button>
                 </div>
                 <div id="resultContainer" class="result-container"></div>
@@ -1360,6 +1939,460 @@ GEOVANA	30	FEMININO"></textarea>
                 }
             }, 100);
         }
+
+        // ===== DARK MODE =====
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            showToast(isDark ? 'Modo escuro ativado!' : 'Modo claro ativado!', 'info');
+        }
+
+        // Carregar preferência de dark mode
+        window.addEventListener('DOMContentLoaded', () => {
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            if (darkMode) {
+                document.body.classList.add('dark-mode');
+            }
+
+            // Mostrar shortcuts hint após 2 segundos
+            setTimeout(() => {
+                document.getElementById('shortcutsHint').classList.add('visible');
+                setTimeout(() => {
+                    document.getElementById('shortcutsHint').classList.remove('visible');
+                }, 5000);
+            }, 2000);
+
+            // Carregar histórico
+            loadHistory();
+        });
+
+        // ===== PROGRESS BAR =====
+        function showProgress(percentage) {
+            const container = document.getElementById('progressContainer');
+            const bar = document.getElementById('progressBar');
+            container.style.display = 'block';
+            bar.style.width = percentage + '%';
+
+            if (percentage >= 100) {
+                setTimeout(() => {
+                    container.style.display = 'none';
+                    bar.style.width = '0%';
+                }, 500);
+            }
+        }
+
+        // ===== HISTORY MANAGEMENT =====
+        let conversionHistory = [];
+
+        function saveToHistory(data, result, labelColumn) {
+            const historyItem = {
+                id: Date.now(),
+                date: new Date().toLocaleString('pt-BR'),
+                rows: data.length,
+                columns: Object.keys(data[0] || {}).length,
+                labelColumn: labelColumn,
+                data: data,
+                result: result
+            };
+
+            conversionHistory.unshift(historyItem);
+
+            // Manter apenas as últimas 10 conversões
+            if (conversionHistory.length > 10) {
+                conversionHistory = conversionHistory.slice(0, 10);
+            }
+
+            localStorage.setItem('conversionHistory', JSON.stringify(conversionHistory));
+            updateHistoryDisplay();
+        }
+
+        function loadHistory() {
+            const saved = localStorage.getItem('conversionHistory');
+            if (saved) {
+                conversionHistory = JSON.parse(saved);
+                updateHistoryDisplay();
+            }
+        }
+
+        function updateHistoryDisplay() {
+            const content = document.getElementById('historyContent');
+            const badge = document.getElementById('historyBadge');
+
+            if (conversionHistory.length === 0) {
+                content.innerHTML = '<p style="text-align: center; opacity: 0.5;">Nenhuma conversão salva ainda</p>';
+                badge.style.display = 'none';
+            } else {
+                badge.style.display = 'flex';
+                badge.textContent = conversionHistory.length;
+
+                content.innerHTML = conversionHistory.map(item => `
+                    <div class="history-item" onclick="loadHistoryItem(${item.id})">
+                        <div class="history-item-header">
+                            <span class="history-item-date">${item.date}</span>
+                            <button class="history-item-delete" onclick="event.stopPropagation(); deleteHistoryItem(${item.id})">🗑️</button>
+                        </div>
+                        <div class="history-item-info">
+                            📊 ${item.rows} linhas | 📈 ${item.columns} colunas<br>
+                            🏷️ Label: ${item.labelColumn}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function loadHistoryItem(id) {
+            const item = conversionHistory.find(h => h.id === id);
+            if (item) {
+                currentData = item.data;
+                columnOrder = Object.keys(item.data[0] || {});
+                displayTable();
+                document.getElementById('labelColumn').value = item.labelColumn;
+                document.getElementById('convertBtn').disabled = false;
+                document.getElementById('resultContainer').textContent = item.result;
+                document.getElementById('resultSection').style.display = 'block';
+                toggleHistoryPanel();
+                showSuccess('Conversão carregada do histórico!', 'Carregado!');
+            }
+        }
+
+        function deleteHistoryItem(id) {
+            conversionHistory = conversionHistory.filter(h => h.id !== id);
+            localStorage.setItem('conversionHistory', JSON.stringify(conversionHistory));
+            updateHistoryDisplay();
+            showInfo('Item removido do histórico', 'Removido');
+        }
+
+        function clearHistory() {
+            if (confirm('Deseja realmente limpar todo o histórico?')) {
+                conversionHistory = [];
+                localStorage.removeItem('conversionHistory');
+                updateHistoryDisplay();
+                showSuccess('Histórico limpo com sucesso!', 'Limpo!');
+            }
+        }
+
+        function toggleHistoryPanel() {
+            const panel = document.getElementById('historyPanel');
+            panel.classList.toggle('open');
+        }
+
+        // ===== EXPORT MODAL =====
+        let selectedExportFormat = 'txt';
+        let exportData = '';
+
+        function openExportModal() {
+            const result = document.getElementById('resultContainer').textContent;
+            if (!result) {
+                showError('Não há dados para exportar!');
+                return;
+            }
+            exportData = result;
+            document.getElementById('exportModal').classList.add('active');
+            selectExportFormat('txt');
+        }
+
+        function closeExportModal() {
+            document.getElementById('exportModal').classList.remove('active');
+        }
+
+        function selectExportFormat(format) {
+            selectedExportFormat = format;
+
+            // Atualizar seleção visual
+            document.querySelectorAll('.export-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.closest('.export-option').classList.add('selected');
+
+            // Gerar preview
+            const preview = document.getElementById('exportPreview');
+            preview.style.display = 'block';
+
+            let previewContent = '';
+
+            switch(format) {
+                case 'csv':
+                    previewContent = convertToCSV();
+                    break;
+                case 'json':
+                    previewContent = convertToJSON();
+                    break;
+                default:
+                    previewContent = exportData;
+            }
+
+            preview.textContent = previewContent.substring(0, 1000) + (previewContent.length > 1000 ? '\n\n... (preview limitado)' : '');
+        }
+
+        function convertToCSV() {
+            if (!currentData.length) return '';
+
+            const headers = Object.keys(currentData[0]);
+            let csv = headers.join(',') + '\n';
+
+            currentData.forEach(row => {
+                const values = headers.map(h => {
+                    const value = String(row[h] || '');
+                    return value.includes(',') ? `"${value}"` : value;
+                });
+                csv += values.join(',') + '\n';
+            });
+
+            return csv;
+        }
+
+        function convertToJSON() {
+            return JSON.stringify(currentData, null, 2);
+        }
+
+        function downloadExport() {
+            let content, filename, mimeType;
+
+            switch(selectedExportFormat) {
+                case 'csv':
+                    content = convertToCSV();
+                    filename = 'dados_exportados.csv';
+                    mimeType = 'text/csv';
+                    break;
+                case 'json':
+                    content = convertToJSON();
+                    filename = 'dados_exportados.json';
+                    mimeType = 'application/json';
+                    break;
+                default:
+                    content = exportData;
+                    filename = 'lista_convertida.txt';
+                    mimeType = 'text/plain';
+            }
+
+            const blob = new Blob([content], {type: mimeType});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showSuccess(`Arquivo ${selectedExportFormat.toUpperCase()} baixado!`, 'Download Completo!');
+            closeExportModal();
+        }
+
+        function copyExport() {
+            let content;
+
+            switch(selectedExportFormat) {
+                case 'csv':
+                    content = convertToCSV();
+                    break;
+                case 'json':
+                    content = convertToJSON();
+                    break;
+                default:
+                    content = exportData;
+            }
+
+            navigator.clipboard.writeText(content).then(() => {
+                showSuccess('Conteúdo copiado!', 'Copiado!');
+                closeExportModal();
+            }).catch(() => {
+                showError('Erro ao copiar');
+            });
+        }
+
+        // ===== TABLE FILTERING =====
+        let currentSortColumn = null;
+        let currentSortDirection = 'asc';
+
+        function filterTable() {
+            const searchTerm = document.getElementById('tableSearch').value.toLowerCase();
+            const tbody = document.getElementById('tableBody');
+            const rows = tbody.getElementsByTagName('tr');
+
+            let visibleCount = 0;
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+
+                for (let cell of cells) {
+                    if (cell.textContent.toLowerCase().includes(searchTerm)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+
+            // Atualizar stats
+            const stats = document.getElementById('dataStats');
+            if (searchTerm) {
+                stats.innerHTML += ` | 🔍 <strong>${visibleCount}</strong> resultado(s) encontrado(s)`;
+            }
+        }
+
+        function sortTable(columnIndex) {
+            const tbody = document.getElementById('tableBody');
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+
+            // Determinar direção
+            if (currentSortColumn === columnIndex) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = columnIndex;
+                currentSortDirection = 'asc';
+            }
+
+            // Ordenar
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent;
+                const bValue = b.cells[columnIndex].textContent;
+
+                const comparison = aValue.localeCompare(bValue, 'pt-BR', { numeric: true });
+                return currentSortDirection === 'asc' ? comparison : -comparison;
+            });
+
+            // Reaplicar linhas ordenadas
+            rows.forEach(row => tbody.appendChild(row));
+
+            // Atualizar indicadores visuais
+            const headers = document.getElementById('tableHead').getElementsByTagName('th');
+            Array.from(headers).forEach((th, idx) => {
+                th.classList.remove('sorted-asc', 'sorted-desc');
+                if (idx === columnIndex) {
+                    th.classList.add(currentSortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
+                }
+            });
+        }
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + V - focar na área de colar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'v' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                document.getElementById('pasteArea').focus();
+                switchTab('paste');
+            }
+
+            // Ctrl/Cmd + Enter - processar dados
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const pasteData = document.getElementById('pasteArea').value.trim();
+                if (pasteData) {
+                    processData();
+                }
+            }
+
+            // Escape - limpar tudo
+            if (e.key === 'Escape') {
+                if (document.getElementById('exportModal').classList.contains('active')) {
+                    closeExportModal();
+                } else if (document.getElementById('historyPanel').classList.contains('open')) {
+                    toggleHistoryPanel();
+                } else if (confirm('Deseja limpar todos os dados?')) {
+                    clearAll();
+                }
+            }
+
+            // Ctrl/Cmd + H - toggle histórico
+            if ((e.ctrlKey || e.metaKey) && e.key === 'h') {
+                e.preventDefault();
+                toggleHistoryPanel();
+            }
+        });
+
+        // Modificar a função updateTableDisplay para adicionar ordenação
+        const originalUpdateTableDisplay = updateTableDisplay;
+        updateTableDisplay = function() {
+            originalUpdateTableDisplay();
+
+            // Adicionar event listeners de ordenação nos cabeçalhos
+            const headers = document.getElementById('tableHead').getElementsByTagName('th');
+            Array.from(headers).forEach((th, index) => {
+                th.classList.add('sortable');
+                th.onclick = () => sortTable(index);
+            });
+        };
+
+        // Modificar a função convertToList para salvar no histórico
+        const originalConvertToList = convertToList;
+        convertToList = function() {
+            const labelColumn = document.getElementById('labelColumn').value;
+            if (!labelColumn) {
+                showError('Por favor, selecione uma coluna de labels!');
+                return;
+            }
+
+            showLoading();
+            showProgress(0);
+
+            setTimeout(() => {
+                try {
+                    showProgress(30);
+                    let result = '';
+                    const otherColumns = columnOrder.filter(col => col !== labelColumn);
+                    const totalColumns = otherColumns.length;
+
+                    otherColumns.forEach((column, index) => {
+                        showProgress(30 + ((index / totalColumns) * 60));
+
+                        if (index > 0) result += '\n\n';
+
+                        const cleanColumnName = column.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+                        result += `${cleanColumnName.toUpperCase()}:\n`;
+
+                        const validRows = currentData.filter(row => {
+                            const label = row[labelColumn];
+                            const value = row[column];
+                            return label && label.trim() && value && value.trim();
+                        });
+
+                        validRows.forEach(row => {
+                            const label = row[labelColumn].trim();
+                            const value = row[column].trim();
+
+                            const cleanLabel = label.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+                            const cleanValue = value.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+
+                            result += `${cleanLabel} - ${cleanValue}\n`;
+                        });
+
+                        if (validRows.length === 0) {
+                            result += `(Nenhum dado válido encontrado)\n`;
+                        }
+                    });
+
+                    result += `\n\n=== ESTATÍSTICAS ===\n`;
+                    result += `📊 Total de colunas processadas: ${totalColumns}\n`;
+                    result += `📋 Total de registros: ${currentData.length}\n`;
+                    result += `🏷️ Coluna de labels usada: ${labelColumn}\n`;
+                    result += `📅 Gerado em: ${new Date().toLocaleString('pt-BR')}\n`;
+
+                    showProgress(90);
+
+                    document.getElementById('resultContainer').textContent = result;
+                    document.getElementById('resultSection').style.display = 'block';
+
+                    // Salvar no histórico
+                    saveToHistory(currentData, result, labelColumn);
+
+                    document.getElementById('resultSection').scrollIntoView({behavior: 'smooth'});
+
+                    showProgress(100);
+                    hideLoading();
+                    showSuccess(`Lista convertida com sucesso! ${totalColumns} colunas processadas.`, 'Conversão Concluída!');
+                } catch (error) {
+                    hideLoading();
+                    showProgress(0);
+                    showError('Erro ao converter os dados: ' + error.message);
+                }
+            }, 100);
+        };
     </script>
 </body>
 </html>
