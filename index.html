@@ -2507,13 +2507,6 @@ GEOVANA	30	FEMININO"></textarea>
 
         // ===== KEYBOARD SHORTCUTS =====
         document.addEventListener('keydown', (e) => {
-            // Ctrl/Cmd + V - focar na área de colar
-            if ((e.ctrlKey || e.metaKey) && e.key === 'v' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'INPUT') {
-                e.preventDefault();
-                document.getElementById('pasteArea').focus();
-                switchTab('paste');
-            }
-
             // Ctrl/Cmd + Enter - processar dados
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                 const pasteData = document.getElementById('pasteArea').value.trim();
