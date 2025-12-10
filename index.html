@@ -510,6 +510,76 @@
             min-width: 200px;
         }
 
+        /* Merge Cell Option */
+        .merge-cell-option {
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.05) 0%, rgba(0, 242, 254, 0.05) 100%);
+            border: 2px solid rgba(79, 172, 254, 0.2);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .merge-cell-option:hover {
+            border-color: rgba(79, 172, 254, 0.4);
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.08) 0%, rgba(0, 242, 254, 0.08) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.15);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            user-select: none;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #4facfe;
+            transition: transform 0.2s ease;
+        }
+
+        .checkbox-label input[type="checkbox"]:hover {
+            transform: scale(1.1);
+        }
+
+        .checkbox-label span {
+            transition: color 0.3s ease;
+        }
+
+        .checkbox-label:hover span {
+            color: #4facfe;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 8px;
+            margin-left: 30px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .merge-cell-option {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+            border-color: rgba(79, 172, 254, 0.3);
+        }
+
+        body.dark-mode .checkbox-label {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .help-text {
+            color: #aaa;
+        }
+
         .table-container {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
@@ -1477,16 +1547,33 @@
 
                 <div id="paste-tab" class="tab-content active">
                     <h3>Cole seus dados aqui (separados por tab):</h3>
-                    <textarea id="pasteArea" class="paste-area" 
-                              placeholder="Cole aqui os dados da sua planilha... 
+                    <textarea id="pasteArea" class="paste-area"
+                              placeholder="Cole aqui os dados da sua planilha...
 Exemplo:
 NOME	IDADE	SEXO
 MARCOS	24	MASCULINO
 GEOVANA	30	FEMININO"></textarea>
+
+                    <div class="merge-cell-option">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="unmergeCheckbox" checked>
+                            <span>🔗 Separar células mescladas automaticamente</span>
+                        </label>
+                        <small class="help-text">Quando ativado, células vazias consecutivas serão preenchidas com o valor da célula anterior (útil para dados com células mescladas)</small>
+                    </div>
+
                     <button class="process-btn" onclick="processData()">🔍 Processar Dados</button>
                 </div>
 
                 <div id="upload-tab" class="tab-content">
+                    <div class="merge-cell-option" style="margin-bottom: 15px;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="unmergeCheckboxExcel" checked>
+                            <span>🔗 Separar células mescladas automaticamente</span>
+                        </label>
+                        <small class="help-text">Quando ativado, células vazias consecutivas serão preenchidas com o valor da célula anterior</small>
+                    </div>
+
                     <div class="file-upload" onclick="document.getElementById('fileInput').click()">
                         <div class="upload-icon">📁</div>
                         <h3>Arraste um arquivo Excel aqui ou clique para selecionar</h3>
@@ -1671,6 +1758,31 @@ GEOVANA	30	FEMININO"></textarea>
             document.getElementById('loading').style.display = 'none';
         }
 
+        // Função para separar células mescladas (preencher células vazias com valor anterior)
+        function unmergeData(parsedData) {
+            if (!parsedData || parsedData.length === 0) return parsedData;
+
+            return parsedData.map(row => {
+                const unmergedRow = [...row];
+                let lastValue = '';
+
+                for (let i = 0; i < unmergedRow.length; i++) {
+                    const cell = unmergedRow[i];
+
+                    if (cell && cell.trim() !== '') {
+                        // Célula tem conteúdo, armazena como último valor
+                        lastValue = cell;
+                    } else if (lastValue !== '') {
+                        // Célula vazia e há um valor anterior - preenche
+                        unmergedRow[i] = lastValue;
+                    }
+                    // Se célula vazia e não há valor anterior, mantém vazia
+                }
+
+                return unmergedRow;
+            });
+        }
+
         // Função auxiliar para garantir que não haja headers duplicados
         function normalizeHeaders(headers) {
             const seen = new Map();
@@ -1702,15 +1814,21 @@ GEOVANA	30	FEMININO"></textarea>
             setTimeout(() => {
                 try {
                     // Usar parsing mais robusto para dados complexos
-                    const parsedData = parseComplexTSV(pasteData);
-                    
+                    let parsedData = parseComplexTSV(pasteData);
+
                     if (!parsedData || parsedData.length < 2) {
                         throw new Error('Dados insuficientes');
                     }
-                    
+
                     // Validar número de linhas
                     if (parsedData.length > 100000) {
                         throw new Error('Muitas linhas. Limite: 100.000 linhas');
+                    }
+
+                    // Verificar se deve separar células mescladas
+                    const shouldUnmerge = document.getElementById('unmergeCheckbox').checked;
+                    if (shouldUnmerge) {
+                        parsedData = unmergeData(parsedData);
                     }
 
                     const headers = parsedData[0];
@@ -1853,19 +1971,25 @@ GEOVANA	30	FEMININO"></textarea>
                     const workbook = XLSX.read(data, {type: 'array'});
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-                    
+                    let jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
                     if (jsonData.length < 2) {
                         hideLoading();
                         showError('O arquivo deve ter pelo menos uma linha de cabeçalho e uma linha de dados.');
                         return;
                     }
-                    
+
                     // Validar tamanho
                     if (jsonData.length > 100000) {
                         hideLoading();
                         showError('Arquivo muito grande. Limite: 100.000 linhas');
                         return;
+                    }
+
+                    // Verificar se deve separar células mescladas
+                    const shouldUnmerge = document.getElementById('unmergeCheckboxExcel').checked;
+                    if (shouldUnmerge) {
+                        jsonData = unmergeData(jsonData);
                     }
 
                     const headers = jsonData[0];
